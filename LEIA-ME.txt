@@ -1,11 +1,6 @@
-MEU TREINO — PWA (versão inicial)
-
-Para instalar no iPhone, hospede o conteúdo desta pasta em um endereço HTTPS (ex.: GitHub Pages). Abra o endereço no Safari e selecione Compartilhar > Adicionar à Tela de Início.
-
-O arquivo index.html pode ser aberto localmente no Mac para teste, mas instalação PWA e cache offline exigem HTTPS ou localhost.
-
-Incluído: fichas demonstrativas, sessões com registro de séries/cargas, histórico, biblioteca inicial demonstrativa, importação JSON e exportação de backup.
-
-Importante: a biblioteca não é uma transcrição completa do vídeo. Não há integração com Apple Saúde nem imagens/vídeos de exercícios nesta versão.
-
-Os dados ficam no armazenamento local do navegador. Exporte backups regularmente; apagar dados do Safari ou o aplicativo pode apagá-los.
+MEU TREINO v2 - BIBLIOTECA DO VÍDEO
+Envie os arquivos desta pasta para a raiz do repositório GitHub Pages.
+Não apague o armazenamento do site no iPhone: fichas e histórico ficam no dispositivo.
+A biblioteca será adicionada sem substituir as fichas e o histórico.
+Os códigos são os identificados na gravação; alguns itens sem código são apresentados separadamente.
+Imagens e vídeos dos equipamentos ainda não estão incluídos.

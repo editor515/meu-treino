@@ -1,6 +1,32 @@
-MEU TREINO v2 - BIBLIOTECA DO VÍDEO
-Envie os arquivos desta pasta para a raiz do repositório GitHub Pages.
-Não apague o armazenamento do site no iPhone: fichas e histórico ficam no dispositivo.
-A biblioteca será adicionada sem substituir as fichas e o histórico.
-Os códigos são os identificados na gravação; alguns itens sem código são apresentados separadamente.
-Imagens e vídeos dos equipamentos ainda não estão incluídos.
+MEU TREINO — PWA v4.0 (TEMA CLARO)
+================================
+
+O QUE MUDOU
+- Tema totalmente claro: fundo cinza suave, cartões brancos e verde-petróleo.
+- Navegação inferior com 5 abas: Hoje, Treinar, Biblioteca, Histórico e Mais.
+- Tela inicial com treino sugerido pelo dia, atalhos e fichas em cartões.
+- Sessão mais legível: séries, carga, repetições, histórico anterior e conclusão.
+- Biblioteca com busca por código ou nome e opção de carregar todos os resultados.
+- Editor de ficha com informações editáveis na própria tela.
+- Dados/Importar e Evolução acessíveis pela aba Mais e pela tela Hoje.
+- Ícones PNG para facilitar a instalação no iPhone.
+
+ATUALIZAÇÃO SEM PERDER HISTÓRICO
+1. Na versão atual, exporte um backup em Dados / Mais.
+2. Descompacte este ZIP no Mac.
+3. No repositório https://github.com/editor515/meu-treino envie TODOS os arquivos
+   desta pasta, substituindo os de mesmo nome na RAIZ do repositório.
+4. Confirme o commit, aguarde o GitHub Pages atualizar e reabra o PWA no iPhone.
+5. Se a interface antiga persistir, visite o endereço online no Safari e recarregue.
+   Não exclua o PWA nem limpe dados do site para evitar perdas de registros.
+
+Os dados continuam no mesmo armazenamento local (IndexedDB/compatibilidade com
+localStorage) da v3.1. O pacote não contém seus dados pessoais.
+
+A biblioteca contém os 161 itens anteriores. Imagens/vídeos específicos dos
+aparelhos ainda não foram incluídos, pois requerem correspondência verificada.
+O Apple Saúde não é acessível diretamente via PWA.
+
+ARQUIVOS
+index.html, styles.css, app.js, ui.js, sw.js, manifest.webmanifest,
+icon.svg, icon-180.png, icon-192.png, icon-512.png, biblioteca-video.json.

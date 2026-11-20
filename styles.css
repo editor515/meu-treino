@@ -21,3 +21,7 @@ input,select,textarea{width:100%;border:1px solid #cad9d8;border-radius:12px;bac
 @media(min-width:700px){main{padding:24px 22px 0}.app-header{padding-left:24px;padding-right:24px}.plan-list{display:grid;grid-template-columns:1fr 1fr;column-gap:14px}.hero{padding:26px 28px}.quick-actions{max-width:560px}.tabs{left:50%;transform:translateX(-50%);max-width:600px;border:1px solid var(--border);border-radius:19px 19px 0 0}.statcard{padding:18px}}
 @media(max-width:370px){.app-header{padding-left:12px;padding-right:12px}main{padding-left:12px;padding-right:12px}.card{padding:13px}.exercise-card{padding:13px}.setrow{gap:5px;grid-template-columns:20px minmax(0,1fr) minmax(0,1fr) 35px 26px}.setrow .donebox{width:32px}.quick-action{font-size:11px}.brand-subtitle{font-size:10px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+.compact-card{padding:14px 15px}
+.form-grid-1{grid-template-columns:1fr}
+@media(min-width:700px){.form-grid-1{grid-template-columns:repeat(2,minmax(0,1fr))}}

@@ -1,32 +1,29 @@
-MEU TREINO — PWA v4.0 (TEMA CLARO)
-================================
+MEU TREINO v5.2 — BIBLIOTECA COM FOTOS DE REFERÊNCIA
+
+ATUALIZAÇÃO
+1. No PWA instalado: Mais > Exportar backup completo. Guarde o JSON.
+2. Descompacte o ZIP no Mac.
+3. Envie TODOS os arquivos da pasta extraída para a RAIZ do repositório editor515/meu-treino no GitHub, substituindo os anteriores.
+4. Aguarde a atualização do GitHub Pages e abra novamente o app no iPhone. Em Mais opções, confira v5.2.0.
+5. Não remova o aplicativo da tela inicial nem limpe dados do Safari.
 
 O QUE MUDOU
-- Tema totalmente claro: fundo cinza suave, cartões brancos e verde-petróleo.
-- Navegação inferior com 5 abas: Hoje, Treinar, Biblioteca, Histórico e Mais.
-- Tela inicial com treino sugerido pelo dia, atalhos e fichas em cartões.
-- Sessão mais legível: séries, carga, repetições, histórico anterior e conclusão.
-- Biblioteca com busca por código ou nome e opção de carregar todos os resultados.
-- Editor de ficha com informações editáveis na própria tela.
-- Dados/Importar e Evolução acessíveis pela aba Mais e pela tela Hoje.
-- Ícones PNG para facilitar a instalação no iPhone.
+- 36 fotos de referência reais de aparelhos ligadas a códigos específicos.
+- 29 imagens dos itens com referências localizadas anteriormente, mais 116 e 121 e cinco equipamentos do treino atual.
+- Nº 116 = Cadeira Abdutora Hammer.
+- Nº 121 = Cadeira Adutora Hammer.
+- Corrige os nomes também nas fichas já salvas. Não altera o histórico já realizado.
+- Cada imagem possui o link da fonte, na página de detalhes do exercício.
+- Mantém a biblioteca com 161 exercícios e as ferramentas de edição de fichas da v5.0.
+- A associação é provisória: diferenças de geração/modelo dos equipamentos podem existir.
+- As imagens são carregadas dos sites originais; dependem da conexão e da disponibilidade do site. Não estão incorporadas ao ZIP.
 
-ATUALIZAÇÃO SEM PERDER HISTÓRICO
-1. Na versão atual, exporte um backup em Dados / Mais.
-2. Descompacte este ZIP no Mac.
-3. No repositório https://github.com/editor515/meu-treino envie TODOS os arquivos
-   desta pasta, substituindo os de mesmo nome na RAIZ do repositório.
-4. Confirme o commit, aguarde o GitHub Pages atualizar e reabra o PWA no iPhone.
-5. Se a interface antiga persistir, visite o endereço online no Safari e recarregue.
-   Não exclua o PWA nem limpe dados do site para evitar perdas de registros.
+ARQUIVOS NOVOS
+catalogo-fotos.json — 36 registros com imagem e link da fonte.
+ASSOCIACOES_FOTOS.csv — tabela dos códigos, nomes, URLs e fontes.
 
-Os dados continuam no mesmo armazenamento local (IndexedDB/compatibilidade com
-localStorage) da v3.1. O pacote não contém seus dados pessoais.
+OBSERVAÇÃO IMPORTANTE
+Os demais exercícios continuam cadastrados, mas sem fotografia direta. Na pesquisa anterior, a categoria “Possível” incluía páginas genéricas de fabricante ou buscas, NÃO fotografias verificadas por número. Nada foi inventado para preencher essas lacunas.
 
-A biblioteca contém os 161 itens anteriores. Imagens/vídeos específicos dos
-aparelhos ainda não foram incluídos, pois requerem correspondência verificada.
-O Apple Saúde não é acessível diretamente via PWA.
-
-ARQUIVOS
-index.html, styles.css, app.js, ui.js, sw.js, manifest.webmanifest,
-icon.svg, icon-180.png, icon-192.png, icon-512.png, biblioteca-video.json.
+DADOS / BACKUP
+Use a exportação JSON antes de atualizar. Fotos pessoais adicionadas manualmente pelo usuário são preservadas na migração de imagens.

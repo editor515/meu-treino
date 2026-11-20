@@ -1,17 +1,53 @@
 'use strict';
-const OLD='meutreino-v1', STORE='meu-treino-v3', DBNAME='meu-treino-storage', APP_VERSION='4.0.0';
+const OLD='meutreino-v1', STORE='meu-treino-v3', DBNAME='meu-treino-storage', APP_VERSION='5.2.0';
 const seed={version:3,plans:[],library:[{id:'supino-maquina',name:'Supino máquina',group:'Peito',equipment:'Máquina'},{id:'elevacao-lateral',name:'Elevação lateral',group:'Ombros',equipment:'Halteres'},{id:'triceps-corda',name:'Tríceps corda',group:'Tríceps',equipment:'Polia'}],history:[],active:null};
 let db=structuredClone(seed), idb=null, saving=Promise.resolve(), activeTab='home',restEnd=0, restInterval=null, sessionInterval=null, pendingImport=null, searchText='',groupFilter='',libraryDisplayLimit=60;
 const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])), uid=()=>crypto.randomUUID?.()||('id-'+Date.now()+'-'+Math.random().toString(36).slice(2));
 const date=s=>new Date(s).toLocaleString('pt-BR'), today=s=>new Date(s).toLocaleDateString('pt-BR'), mins=(a,b)=>Math.max(0,Math.round((new Date(b)-new Date(a))/60000));
 function notice(t){$('toast').textContent=t;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',3000)}
-function sanitize(d){if(!d||typeof d!=='object')return structuredClone(seed);return {version:3,plans:Array.isArray(d.plans)?d.plans:[],library:Array.isArray(d.library)?d.library:[],history:Array.isArray(d.history)?d.history:[],active:d.active||null}}
+function sanitize(d){if(!d||typeof d!=='object')return structuredClone(seed);return {version:3,plans:Array.isArray(d.plans)?d.plans:[],library:Array.isArray(d.library)?d.library:[],history:Array.isArray(d.history)?d.history:[],active:d.active||null,mediaCatalogVersion:d.mediaCatalogVersion||null}}
 function openDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open(DBNAME,1);req.onupgradeneeded=()=>req.result.createObjectStore('state');req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
 function idbGet(){return new Promise((res,rej)=>{let tx=idb.transaction('state','readonly'),r=tx.objectStore('state').get('app');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
 function idbPut(snapshot){return new Promise((res,rej)=>{let tx=idb.transaction('state','readwrite');tx.objectStore('state').put(snapshot,'app');tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
 function save(){const snap=structuredClone(db);saving=saving.then(()=>idb?idbPut(snap):Promise.resolve(localStorage.setItem(STORE,JSON.stringify(snap)))).catch(err=>{console.error(err);notice('Não foi possível salvar. Exporte um backup!')});return saving}
-async function init(){try{idb=await openDB();let stored=await idbGet();if(stored)db=sanitize(stored);else{let legacy=localStorage.getItem(OLD)||localStorage.getItem(STORE);if(legacy)db=sanitize(JSON.parse(legacy));await save()}}catch(err){console.warn('IndexedDB indisponível',err);try{db=sanitize(JSON.parse(localStorage.getItem(STORE)||localStorage.getItem(OLD)))}catch{db=structuredClone(seed)}}await mergeVideoLibrary();$('today').textContent=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>tab(b.dataset.tab));$('import').addEventListener('change',readImport);tab('home');setInterval(()=>{if(activeTab==='session')updateClock();updateRest()},1000);if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(console.warn)}
+async function init(){try{idb=await openDB();let stored=await idbGet();if(stored)db=sanitize(stored);else{let legacy=localStorage.getItem(OLD)||localStorage.getItem(STORE);if(legacy)db=sanitize(JSON.parse(legacy));await save()}}catch(err){console.warn('IndexedDB indisponível',err);try{db=sanitize(JSON.parse(localStorage.getItem(STORE)||localStorage.getItem(OLD)))}catch{db=structuredClone(seed)}}await mergeVideoLibrary();await mergeMediaCatalog();$('today').textContent=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>tab(b.dataset.tab));$('import').addEventListener('change',readImport);tab('home');setInterval(()=>{if(activeTab==='session')updateClock();updateRest()},1000);if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(console.warn)}
 async function mergeVideoLibrary(){try{let r=await fetch('./biblioteca-video.json');if(!r.ok)return;let data=await r.json(), ids=new Set(db.library.map(x=>x.id)),n=0;for(const e of data.library||[]){if(!ids.has(e.id)){db.library.push(e);ids.add(e.id);n++}}if(n)await save()}catch(e){console.warn('Catálogo não disponível',e)}}
+// Aplica associações fotográficas uma única vez por versão, sem substituir fotos do usuário.
+async function mergeMediaCatalog(){
+ try{
+  const response=await fetch('./catalogo-fotos.json');
+  if(!response.ok) return;
+  const catalog=await response.json();
+  if(db.mediaCatalogVersion===catalog.version) return;
+  for(const ref of catalog.items||[]){
+   const entry=db.library.find(e=>e.id===ref.id);
+   if(!entry) continue;
+   // Fotos adicionadas manualmente permanecem como preferência do usuário.
+   if(!entry.image || entry.mediaCatalogTag){
+     Object.assign(entry,{
+      image:ref.image,
+      imageSource:ref.imageSource,
+      imageLabel:ref.imageLabel,
+      imageKind:'remota',
+      mediaStatus:'associacao-provisoria',
+      mediaCatalogTag:catalog.version
+     });
+   }
+  }
+  // Correção expressamente confirmada dos códigos 116 e 121.
+  const corrected={ 'video-116':'Cadeira Abdutora Hammer', 'video-121':'Cadeira Adutora Hammer' };
+  for(const [id,name] of Object.entries(corrected)){
+    const item=db.library.find(e=>e.id===id);
+    if(item) item.name=name;
+    for(const plan of db.plans) for(const e of plan.exercises||[]) {
+      if(e.id===id){e.name=name;e.originalNumber=Number(id.split('-')[1]);}
+    }
+    for(const e of db.active?.items||[]) if(e.id===id){e.name=name;e.originalNumber=Number(id.split('-')[1]);}
+  }
+  db.mediaCatalogVersion=catalog.version;
+  await save();
+ }catch(err){console.warn('Catálogo de fotos indisponível:',err)}
+}
 function ex(id){return db.library.find(e=>e.id===id)||{id,name:id,group:'Outros'}}
 function exerciseNumber(e){if(!e)return null;if(e.originalNumber!==undefined&&e.originalNumber!==null&&String(e.originalNumber).trim()!=='')return e.originalNumber;let fromLib=db.library.find(x=>x.id===e.id);if(fromLib?.originalNumber!=null)return fromLib.originalNumber;let match=/^video-(\d+)$/.exec(e.id||'');return match?Number(match[1]):null}
 function exerciseBadge(e){let num=exerciseNumber(e);return num==null?'':`<span class="pill" title="Número da biblioteca">Nº ${esc(num)}</span> `}
